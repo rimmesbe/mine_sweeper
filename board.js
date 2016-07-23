@@ -1,14 +1,15 @@
 "use strict";
 
 function Board(size) {
-  this.createBoard = function() {
-    var rows = [];
-      for(var i=0; i<10; i++) {
-        rows.push(new Array(10));
-      }
-    return rows;
-  };
-  this.board = this.createBoard();
+  this.board = this.createBoard(size);
+}
+
+Board.prototype.createBoard = function(size) {
+  var rows = [];
+  for(var i=0; i<size; i++) {
+    rows.push(new Array(size));
+  }
+  return rows;
 }
 
 Board.prototype.seedBoard = function() {
@@ -34,8 +35,8 @@ Board.prototype.calculateSpot = function(curX, curY) {
     var startX, startY, endX, endY;
     curX === 0 ? startX = 0 : startX = -1;
     curY === 0 ? startY = 0 : startY = -1;
-    curX === 9 ? endX = 1 : endX = 2;
-    curY === 9 ? endY = 1 : endY = 2;
+    curX === this.board.length-1 ? endX = 1 : endX = 2;
+    curY === this.board.length-1 ? endY = 1 : endY = 2;
 
     for(var x = startX; x < endX; x++) {
       for(var y = startY; y < endY; y++) {
