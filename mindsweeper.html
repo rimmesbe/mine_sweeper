@@ -4,14 +4,20 @@
   <title>Mine Sweeper</title>
   <script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
   <script type="text/javascript" src="./board.js"></script>
+  <script type="text/javascript" src="./mine_sweeper.js"></script>
 </head>
 <body>
   <h1>Mine Sweeper</h1>
+  <table>
+  </table>
+
+
   <script>
-    var b = new Board(10);
-    b.seedBoard();
-    b.calculateBoard();
-    b.displayBoard();
+    var mine = new MineSweeper(10);
+    mine.mineBoard.seedBoard();
+    mine.mineBoard.calculateBoard();
+    // b.displayBoard();
+    mine.generateBoard();
   </script>
 
 </body>
