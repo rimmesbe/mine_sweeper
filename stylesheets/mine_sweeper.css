@@ -11,3 +11,11 @@ td {
   margin: 0px;
   border-collapse: collapse;
 }
+
+span {
+  visibility: hidden;
+}
+
+.revealed {
+  visibility: visible;
+}
