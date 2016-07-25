@@ -10,16 +10,16 @@ Board.prototype.createBoard = function(size) {
     rows.push(new Array(size));
   }
   return rows;
-}
+};
 
 Board.prototype.seedBoard = function() {
   for(var i=0; i<this.board.length; i++) {
     for(var j=0; j<this.board[i].length; j++) {
       var random = Math.ceil(Math.random()*10);
-      (random % 3 === 0) ? (this.board[i][j] = "B") : (this.board[i][j] = "_");
+      (random % 4 === 0) ? (this.board[i][j] = "B") : (this.board[i][j]= "");
     }
   }
-}
+};
 
 Board.prototype.calculateBoard = function() {
   for(var i=0; i<this.board.length; i++) {
@@ -27,7 +27,7 @@ Board.prototype.calculateBoard = function() {
       this.calculateSpot(i, j);
     }
   }
-}
+};
 
 Board.prototype.calculateSpot = function(curX, curY) {
   if(this.board[curX][curY] !== "B") {
