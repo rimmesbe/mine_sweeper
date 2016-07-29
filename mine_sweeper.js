@@ -59,7 +59,7 @@ MineSweeper.prototype.generateBoard = function() {
       var td = _td_.cloneNode(false);
       $(td).attr('id', (col+"c"));
       var span = _span_.cloneNode(false);
-      $(span).text(this.board[row][col]);
+      $(span).text(this.board[row][col].val);
       $(td).append(span);
       $(tr).append(td);
     }
