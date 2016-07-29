@@ -40,17 +40,7 @@ function reveal(target) {
   return;
 };
 
-function MineSweeper(size) {
-  var results = "unfinished";
-  this.mineBoard = new Board(size);
-  this.board = this.mineBoard.board;
-  this.getResults = function() {return results;};
-  this.setResults = function(status) {
-    results = status;
-  };
-}
-
-MineSweeper.prototype.generateBoard = function() {
+function generateBoard() {
   var table = $("table");
   for(var row=0; row<this.board.length; row++) {
     var tr = _tr_.cloneNode(false);
@@ -67,21 +57,18 @@ MineSweeper.prototype.generateBoard = function() {
   }
 }
 
-MineSweeper.prototype.userClick = function() {
+function userClick = function() {
     $('table').on('click', 'td', function(){
       var target = $(this).find('span');
       reveal(target);
     });
 };
 
-
-
 $(document).ready(function(){
-  var mine = new MineSweeper(10);
-  mine.mineBoard.seedBoard();
-  mine.mineBoard.calculateBoard();
-  mine.generateBoard();
+  var board = new Board(10);
+  board.seedBoard();
+  board.calculateBoard();
+  generateBoard();
 
-  mine.userClick();
-
+  userClick();
 });
