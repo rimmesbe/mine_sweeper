@@ -8,6 +8,15 @@ function Spot(val) {
 
 function Board(size) {
   this.board = this.createBoard(size);
+  this.gameOver = false;
+}
+
+Board.prototype.eachSpot = function(func){
+  for(var i=0; i<this.board.length; i++) {
+    for(var j=0; j<this.board[i].length; j++) {
+      func(i,j);
+    }
+  }
 }
 
 Board.prototype.createBoard = function(size) {
@@ -19,20 +28,16 @@ Board.prototype.createBoard = function(size) {
 };
 
 Board.prototype.seedBoard = function() {
-  for(var i=0; i<this.board.length; i++) {
-    for(var j=0; j<this.board[i].length; j++) {
-      var random = Math.ceil(Math.random()*10);
-      (random % 4 === 0) ? (this.board[i][j] = new Spot("B")) : (this.board[i][j] = new Spot(" "));
-    }
-  }
+  this.eachSpot(function(row,col){
+    var random = Math.ceil(Math.random()*10);
+    (random % 4 === 0) ? (this.board[row][col] = new Spot("B")) : (this.board[row][col] = new Spot(" "));
+  }.bind(this));
 };
 
 Board.prototype.calculateBoard = function() {
-  for(var i=0; i<this.board.length; i++) {
-    for(var j=0; j<this.board[i].length; j++) {
-      this.calculateSpot(i, j);
-    }
-  }
+  this.eachSpot(function(row, col){
+    this.calculateSpot(row, col);
+  }.bind(this));
 };
 
 Board.prototype.calculateSpot = function(row, col) {
@@ -41,8 +46,23 @@ Board.prototype.calculateSpot = function(row, col) {
       if(this.board[r+x][c+y].val==="B") {return 1;}
     }.bind(this));
     this.board[row][col].val = bombCount;
-  }
-}
+  };
+};
+
+Board.prototype.updateSpot = function(row, col) {
+  this.revealSpot(row, col);
+  if(this.board[row][col].val==='0') {
+    this.surroundingSpots(row, col, function(x,y,r,c){
+      var currentLocation = this.board[r+x][c+y];
+      if(currentLocation.val==='0' && currentLocation.revealed===false) {
+        this.updateSpot((r+x),(c+y));
+      }
+      if((!(x===0&&y==0))&&currentLocation.val!=='B'){currentLocation.revealed=true}
+    }.bind(this));
+  }else if(this.board[row][col].val==='B') {
+    this.gameOver = true;
+  };
+};
 
 Board.prototype.surroundingSpots = function(row, col, func){
   var val = 0;
@@ -59,33 +79,14 @@ Board.prototype.surroundingSpots = function(row, col, func){
     }
   }
   return val.toString();
-}
+};
 
 Board.prototype.revealSpot = function(row, col) {
   this.board[row][col].revealed = true;
-}
-
-Board.prototype.updateSpot = function(row, col) {
-  this.revealSpot(row, col);
-  if(this.board[row][col].val==='0') {
-    console.log("in if 0")
-    this.surroundingSpots(row, col, function(x,y,r,c){
-      var currentLocation = this.board[r+x][c+y];
-      if(currentLocation.val==='0' && currentLocation.revealed===false) {
-        this.updateSpot((r+x),(c+y));
-      }
-      if((!(x===0&&y==0))&&currentLocation.val!=='B'){currentLocation.revealed=true}
-    }.bind(this));
-  }
-}
+};
 
 Board.prototype.displayBoard = function() {
   for(var i=0; i<this.board.length; i++) {
     console.log(this.board[i]);
   }
-}
-
-// var b = new Board(10);
-// b.seedBoard();
-// b.calculateBoard();
-// b.displayBoard();
+};
