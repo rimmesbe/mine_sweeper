@@ -11,6 +11,10 @@ var MineSweeper = (function() {
     return spot;
   }
 
+  function revealSpot(target) {
+    $(target).addClass('revealed');
+  }
+
   // reveals location, recurses if adjacent spot has 0 bomb count
   function reveal(target) {
     target.addClass('revealed');
@@ -43,7 +47,8 @@ var MineSweeper = (function() {
   };
 
   function generateBoard() {
-    var table = $("table");
+    $('table').remove();
+    var table = _table_.cloneNode(false);
     for(var row=0; row<board.length; row++) {
       var tr = _tr_.cloneNode(false);
       $(tr).attr('id', (row+"r"));
@@ -52,11 +57,13 @@ var MineSweeper = (function() {
         $(td).attr('id', (col+"c"));
         var span = _span_.cloneNode(false);
         $(span).text(board[row][col].val);
+        if(board[row][col].revealed === true){span.addClass('revealed')}
         $(td).append(span);
         $(tr).append(td);
       }
       $(table).append(tr);
     }
+    $('body').append(table);
   }
 
   function userClick() {
