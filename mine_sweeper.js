@@ -57,7 +57,7 @@ var MineSweeper = (function() {
         $(td).attr('id', (col+"c"));
         var span = _span_.cloneNode(false);
         $(span).text(board[row][col].val);
-        if(board[row][col].revealed === true){span.addClass('revealed')}
+        if(board[row][col].revealed === true){$(span).addClass('revealed')}
         $(td).append(span);
         $(tr).append(td);
       }
@@ -67,9 +67,14 @@ var MineSweeper = (function() {
   }
 
   function userClick() {
-      $('table').on('click', 'td', function(){
-        var target = $(this).find('span');
-        reveal(target);
+      $(document).on('click', 'td', function(){
+        console.log("this "+$(this).attr('id'));
+        var targetX = parseInt($(this).parent().attr('id').charAt(0));
+        var targetY = parseInt($(this).attr('id').charAt(0));
+        console.log("X: "+targetX+" Y: "+targetY);
+        game.updateSpot(targetX, targetY);
+        generateBoard();
+        // reveal(target);
       });
   };
 

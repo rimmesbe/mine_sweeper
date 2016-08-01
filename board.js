@@ -3,6 +3,7 @@
 function Spot(val) {
   this.val = val;
   this.revealed = false;
+  // TODO maybe hold coordinates?
 }
 
 function Board(size) {
@@ -57,11 +58,25 @@ Board.prototype.surroundingSpots = function(row, col, func){
       if(!(isNaN(temp))){val = val + temp;}
     }
   }
-  return val;
+  return val.toString();
 }
 
 Board.prototype.revealSpot = function(row, col) {
   this.board[row][col].revealed = true;
+}
+
+Board.prototype.updateSpot = function(row, col) {
+  this.revealSpot(row, col);
+  if(this.board[row][col].val==='0') {
+    console.log("in if 0")
+    this.surroundingSpots(row, col, function(x,y,r,c){
+      var currentLocation = this.board[r+x][c+y];
+      if(currentLocation.val==='0' && currentLocation.revealed===false) {
+        this.updateSpot((r+x),(c+y));
+      }
+      if((!(x===0&&y==0))&&currentLocation.val!=='B'){currentLocation.revealed=true}
+    }.bind(this));
+  }
 }
 
 Board.prototype.displayBoard = function() {
