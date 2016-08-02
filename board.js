@@ -97,7 +97,7 @@ Board.prototype.surroundingSpots = function(row, col, func){
 Board.prototype.eachSpot = function(func){
   for(var i=0; i<this.board.length; i++) {
     for(var j=0; j<this.board[i].length; j++) {
-      func(i,j, val);
+      func(i,j);
     }
   }
 }
