@@ -60,7 +60,9 @@ Board.prototype.updateSpot = function(row, col) {
   };
 };
 
+// checks if game is over
 Board.prototype.isGameOver = function(){
+  // TODO: possible refactor here, cutting down to 1 loop
   this.eachSpot(function(row, col){
     if(this.board[row][col].val==='B' && this.board[row][col].revealed===true){this.gameOver=true;}
   }.bind(this));
@@ -92,15 +94,12 @@ Board.prototype.surroundingSpots = function(row, col, func){
 };
 
 // loops through each spot in board
-Board.prototype.eachSpot = function(func, val){
-  var val = val;
+Board.prototype.eachSpot = function(func){
   for(var i=0; i<this.board.length; i++) {
     for(var j=0; j<this.board[i].length; j++) {
       func(i,j, val);
     }
   }
-  console.log("value: "+val);
-  if(val!=='undefined'){return val};
 }
 
 // sets a spot to status revealed
