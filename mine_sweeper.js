@@ -5,14 +5,18 @@ var _table_ = document.createElement('table'),
     _span_ = document.createElement('span');
 
 var MineSweeper = (function() {
-
+  // handles user click on spot
   function userClick() {
     $(document).on('click', 'td', function(){
       var targetX = parseInt($(this).parent().attr('id').charAt(0)); //row id
       var targetY = parseInt($(this).attr('id').charAt(0));  //col id
       game.updateSpot(targetX, targetY);
       generateBoard();
-      if(game.gameOver===true){$(document).unbind('click');}
+      game.isGameOver();
+      if(game.gameOver===true){
+        $(document).unbind('click');
+        game.getSpotValue(targetX,targetY)==="B" ? $('body').append('<h1>You blew up!</h1>') : $('body').append('<h1>You located all the bombs!</h1>');
+      }
     });
   };
 
@@ -38,7 +42,7 @@ var MineSweeper = (function() {
   }
 
   function init(){
-    game = new Board(10);
+    game = new Board(3);
     board = game.board;
     game.seedBoard();
     game.calculateBoard();

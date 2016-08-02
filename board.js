@@ -107,6 +107,10 @@ Board.prototype.revealSpot = function(row, col) {
   this.board[row][col].revealed = true;
 };
 
+Board.prototype.getSpotValue = function(row, col){
+  return this.board[row][col].val;
+}
+
 Board.prototype.displayBoard = function() {
   for(var i=0; i<this.board.length; i++) {
     console.log(this.board[i]);
