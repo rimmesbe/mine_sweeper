@@ -3,7 +3,6 @@
 function Spot(val) {
   this.val = val;
   this.revealed = false;
-  // TODO maybe hold coordinates?
 }
 
 function Board(size) {
@@ -11,14 +10,7 @@ function Board(size) {
   this.gameOver = false;
 }
 
-Board.prototype.eachSpot = function(func){
-  for(var i=0; i<this.board.length; i++) {
-    for(var j=0; j<this.board[i].length; j++) {
-      func(i,j);
-    }
-  }
-}
-
+// generates board of custom size
 Board.prototype.createBoard = function(size) {
   var rows = [];
   for(var i=0; i<size; i++) {
@@ -27,6 +19,7 @@ Board.prototype.createBoard = function(size) {
   return rows;
 };
 
+// seeds board with random bomb placement
 Board.prototype.seedBoard = function() {
   this.eachSpot(function(row,col){
     var random = Math.ceil(Math.random()*10);
@@ -34,12 +27,14 @@ Board.prototype.seedBoard = function() {
   }.bind(this));
 };
 
+// fills in non-bomb spots with bomb-count
 Board.prototype.calculateBoard = function() {
   this.eachSpot(function(row, col){
     this.calculateSpot(row, col);
   }.bind(this));
 };
 
+// calculates/sets number of bombs around spot
 Board.prototype.calculateSpot = function(row, col) {
   if(this.board[row][col].val !== "B") {
     var bombCount = this.surroundingSpots(row, col, function(x,y,r,c){
@@ -49,6 +44,7 @@ Board.prototype.calculateSpot = function(row, col) {
   };
 };
 
+// reveals spot, and recursively reveals adjacent spots if bomb count 0
 Board.prototype.updateSpot = function(row, col) {
   this.revealSpot(row, col);
   if(this.board[row][col].val==='0') {
@@ -64,6 +60,20 @@ Board.prototype.updateSpot = function(row, col) {
   };
 };
 
+Board.prototype.isGameOver = function(){
+  this.eachSpot(function(row, col){
+    if(this.board[row][col].val==='B' && this.board[row][col].revealed===true){this.gameOver=true;}
+  }.bind(this));
+  if(this.gameOver!==true){
+    this.gameOver = true;
+    this.eachSpot(function(row, col){
+      if(this.board[row][col].val!=='B' && this.board[row][col].revealed===false){this.gameOver=false;}
+    }.bind(this));
+  }
+  return this.gameOver;
+};
+
+// loops through a spots adjacent spots
 Board.prototype.surroundingSpots = function(row, col, func){
   var val = 0;
   var startX, startY, endX, endY;
@@ -81,6 +91,19 @@ Board.prototype.surroundingSpots = function(row, col, func){
   return val.toString();
 };
 
+// loops through each spot in board
+Board.prototype.eachSpot = function(func, val){
+  var val = val;
+  for(var i=0; i<this.board.length; i++) {
+    for(var j=0; j<this.board[i].length; j++) {
+      func(i,j, val);
+    }
+  }
+  console.log("value: "+val);
+  if(val!=='undefined'){return val};
+}
+
+// sets a spot to status revealed
 Board.prototype.revealSpot = function(row, col) {
   this.board[row][col].revealed = true;
 };
