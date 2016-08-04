@@ -3,6 +3,7 @@
 function Spot(val) {
   this.val = val;
   this.revealed = false;
+  this.flagged = false
 }
 
 function Board(size) {
@@ -23,7 +24,7 @@ Board.prototype.createBoard = function(size) {
 Board.prototype.seedBoard = function() {
   this.eachSpot(function(row,col){
     var random = Math.ceil(Math.random()*10);
-    (random % 4 === 0) ? (this.board[row][col] = new Spot("B")) : (this.board[row][col] = new Spot(" "));
+    (random % 6 === 0) ? (this.board[row][col] = new Spot("B")) : (this.board[row][col] = new Spot(" "));
   }.bind(this));
 };
 
@@ -55,10 +56,13 @@ Board.prototype.updateSpot = function(row, col) {
       }
       if((!(x===0&&y==0))&&currentLocation.val!=='B'){currentLocation.revealed=true}
     }.bind(this));
-  }else if(this.board[row][col].val==='B') {
-    this.gameOver = true;
   };
 };
+
+// toggles flagged status of spot
+Board.prototype.flagSpot = function(row, col) {
+  this.board[row][col].flagged===true ? this.board[row][col].flagged=false : this.board[row][col].flagged=true
+}
 
 // checks if game is over
 Board.prototype.isGameOver = function(){

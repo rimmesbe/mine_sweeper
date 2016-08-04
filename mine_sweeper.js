@@ -5,21 +5,43 @@ var _table_ = document.createElement('table'),
     _span_ = document.createElement('span');
 
 var MineSweeper = (function() {
-  // handles user click on spot
+
   function userClick() {
-    $(document).on('click', 'td', function(){
-      var targetX = parseInt($(this).parent().attr('id').charAt(0)); //row id
-      var targetY = parseInt($(this).attr('id').charAt(0));  //col id
-      game.updateSpot(targetX, targetY);
-      generateBoard();
-      game.isGameOver();
-      if(game.gameOver===true){
-        $(document).unbind('click');
-        game.getSpotValue(targetX,targetY)==="B" ? $('body').append('<h1>You blew up!</h1>') : $('body').append('<h1>You located all the bombs!</h1>');
+    $('#game-div').on('mousedown', 'td', function(event) {
+      switch (event.which) {
+          case 1:
+              leftClick(this);
+              break;
+          case 3:
+              rightClick(this);
+              break;
+          default:
+              alert('You have a strange Mouse!');
       }
     });
   };
 
+  // handles user click on spot
+  function leftClick(target) {
+    var targetX = parseInt($(target).parent().attr('id').charAt(0)); //row id
+    var targetY = parseInt($(target).attr('id').charAt(0));  //col id
+    game.updateSpot(targetX, targetY);
+    generateBoard();
+    game.isGameOver();
+    if(game.gameOver===true){
+      $('#game-div').unbind('mousedown');
+      game.getSpotValue(targetX,targetY)==="B" ? $('body').append('<h1>You blew up!</h1>') : $('body').append('<h1>You located all the bombs!</h1>');
+    };
+  };
+
+  function rightClick(target) {
+    $(target).toggleClass('flag');
+    var targetX = parseInt($(target).parent().attr('id').charAt(0)); //row id
+    var targetY = parseInt($(target).attr('id').charAt(0));  //col id
+    game.flagSpot(targetX, targetY);
+  };
+
+  // generates DOM board, removes old board
   function generateBoard() {
     $('.mineSweeper').remove();
     var table = _table_.cloneNode(false);
@@ -32,17 +54,18 @@ var MineSweeper = (function() {
         var span = _span_.cloneNode(false);
         $(span).text(board[row][col].val);
         if(board[row][col].revealed === true){$(span).addClass('revealed')}
+        else if(board[row][col].flagged === true){$(td).addClass('flag')}
         $(td).append(span);
         $(tr).append(td);
       }
       $(table).append(tr);
       $(table).addClass('mineSweeper');
     }
-    $('body').append(table);
+    $('#game-div').append(table);
   }
 
   function init(){
-    game = new Board(3);
+    game = new Board(5);
     board = game.board;
     game.seedBoard();
     game.calculateBoard();
