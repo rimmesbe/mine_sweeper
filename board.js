@@ -6,9 +6,23 @@ function Spot(val) {
   this.flagged = false
 }
 
-function Board(size) {
-  this.board = this.createBoard(size);
+function Board(size, difficulty) {
+  this.difficulty = this.calculateDifficulty(parseInt(difficulty));
+  this.board = this.createBoard(parseInt(size));
   this.gameOver = false;
+}
+
+Board.prototype.calculateDifficulty = function(difficulty) {
+  switch(difficulty) {
+    case 'easy':
+      return 6;
+    case 'medium':
+      return 4;
+    case 'hard':
+      return 3;
+    default:
+      return 6;
+  }
 }
 
 // generates board of custom size
@@ -24,7 +38,7 @@ Board.prototype.createBoard = function(size) {
 Board.prototype.seedBoard = function() {
   this.eachSpot(function(row,col){
     var random = Math.ceil(Math.random()*10);
-    (random % 6 === 0) ? (this.board[row][col] = new Spot("B")) : (this.board[row][col] = new Spot(" "));
+    (random % this.difficulty === 0) ? (this.board[row][col] = new Spot("B")) : (this.board[row][col] = new Spot(" "));
   }.bind(this));
 };
 

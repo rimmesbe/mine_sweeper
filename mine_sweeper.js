@@ -65,25 +65,32 @@ var MineSweeper = (function() {
   }
 
   function setBoardForm(){
-    $('form').submit(function(){
-      var size = $()
-    })
-  }
+    $('form').submit(function(e){
+      e.preventDefault();
+      var size = $('#size').val();
+      var difficulty = $('#difficulty').val();
+      createBoard(size, difficulty);
+      generateBoard();
+      userClick();
+    });
+  };
 
-  function init(){
-    game = new Board(5);
+  function createBoard(size, difficulty){
+    game = new Board(size, difficulty);
     board = game.board;
     game.seedBoard();
     game.calculateBoard();
+  };
+
+  function init(){
+    setBoardForm();
   }
 
   var
     board,
     game,
     publicApi = {
-      init: init,
-      generateBoard: generateBoard,
-      userClick: userClick
+      init: init
     }
   ;
 
@@ -92,6 +99,4 @@ var MineSweeper = (function() {
 
 $(document).ready(function(){
   MineSweeper.init();
-  MineSweeper.generateBoard();
-  MineSweeper.userClick();
 });
