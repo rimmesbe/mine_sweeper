@@ -23,8 +23,8 @@ var MineSweeper = (function() {
 
   // handles user click on spot
   function leftClick(target) {
-    var targetX = parseInt($(target).parent().attr('id').charAt(0)); //row id
-    var targetY = parseInt($(target).attr('id').charAt(0));  //col id
+    var targetX = parseInt($(target).parent().attr('id')); //row id
+    var targetY = parseInt($(target).attr('id'));  //col id
     game.updateSpot(targetX, targetY);
     generateBoard();
     game.isGameOver();
@@ -36,8 +36,8 @@ var MineSweeper = (function() {
 
   function rightClick(target) {
     $(target).toggleClass('flag');
-    var targetX = parseInt($(target).parent().attr('id').charAt(0)); //row id
-    var targetY = parseInt($(target).attr('id').charAt(0));  //col id
+    var targetX = parseInt($(target).parent().attr('id')); //row id
+    var targetY = parseInt($(target).attr('id'));  //col id
     game.flagSpot(targetX, targetY);
   };
 
@@ -47,10 +47,10 @@ var MineSweeper = (function() {
     var table = _table_.cloneNode(false);
     for(var row=0; row<board.length; row++) {
       var tr = _tr_.cloneNode(false);
-      $(tr).attr('id', (row+"r"));
+      $(tr).attr('id', (row));
       for(var col=0; col<board[row].length; col++) {
         var td = _td_.cloneNode(false);
-        $(td).attr('id', (col+"c"));
+        $(td).attr('id', (col));
         var span = _span_.cloneNode(false);
         $(span).text(board[row][col].val);
         if(board[row][col].revealed === true){$(span).addClass('revealed')}
