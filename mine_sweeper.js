@@ -64,6 +64,12 @@ var MineSweeper = (function() {
     $('#game-div').append(table);
   }
 
+  function setBoardForm(){
+    $('form').submit(function(){
+      var size = $()
+    })
+  }
+
   function init(){
     game = new Board(5);
     board = game.board;
