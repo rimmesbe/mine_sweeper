@@ -19,3 +19,8 @@ span {
 .revealed {
   visibility: visible;
 }
+
+.flag {
+  background: red;
+}
+
