@@ -53,7 +53,10 @@ var MineSweeper = (function() {
         $(td).attr('id', (col));
         var span = _span_.cloneNode(false);
         $(span).text(board[row][col].val);
-        if(board[row][col].revealed === true){$(span).addClass('revealed')}
+        if(board[row][col].revealed === true){
+          $(span).addClass('revealed');
+          if(board[row][col].val==='0'){$(span).addClass('blue')}
+        }
         else if(board[row][col].flagged === true){$(td).addClass('flag')}
         $(td).append(span);
         $(tr).append(td);

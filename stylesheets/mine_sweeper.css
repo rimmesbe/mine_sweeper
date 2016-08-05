@@ -5,7 +5,8 @@ table {
 }
 
 td {
-  width: 5%;
+  width: 35px;
+  height: 35px;
   border: 1px solid black;
   padding: 0px;
   margin: 0px;
@@ -13,7 +14,13 @@ td {
 }
 
 span {
+  color: red;
+  font-size: 1.5em;
   visibility: hidden;
+}
+
+.blue {
+  color: blue;
 }
 
 .revealed {
@@ -24,3 +31,6 @@ span {
   background: red;
 }
 
+#game-div {
+
+}
