@@ -9,6 +9,17 @@
 </head>
 <body oncontextmenu="return false;">
   <h1>Mine Sweeper</h1>
+  <div id="settings-form">
+    <form>
+      <input type="number" min="3" max="50" placeholder="board size,  ie: 10" id="size">
+      <select name="difficulty" id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+      <input type="submit" value="start">
+    </form>
+  </div>
   <div id="game-div"></div>
 </body>
 </html>

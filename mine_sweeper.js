@@ -23,8 +23,8 @@ var MineSweeper = (function() {
 
   // handles user click on spot
   function leftClick(target) {
-    var targetX = parseInt($(target).parent().attr('id').charAt(0)); //row id
-    var targetY = parseInt($(target).attr('id').charAt(0));  //col id
+    var targetX = parseInt($(target).parent().attr('id')); //row id
+    var targetY = parseInt($(target).attr('id'));  //col id
     game.updateSpot(targetX, targetY);
     generateBoard();
     game.isGameOver();
@@ -36,8 +36,8 @@ var MineSweeper = (function() {
 
   function rightClick(target) {
     $(target).toggleClass('flag');
-    var targetX = parseInt($(target).parent().attr('id').charAt(0)); //row id
-    var targetY = parseInt($(target).attr('id').charAt(0));  //col id
+    var targetX = parseInt($(target).parent().attr('id')); //row id
+    var targetY = parseInt($(target).attr('id'));  //col id
     game.flagSpot(targetX, targetY);
   };
 
@@ -47,10 +47,10 @@ var MineSweeper = (function() {
     var table = _table_.cloneNode(false);
     for(var row=0; row<board.length; row++) {
       var tr = _tr_.cloneNode(false);
-      $(tr).attr('id', (row+"r"));
+      $(tr).attr('id', (row));
       for(var col=0; col<board[row].length; col++) {
         var td = _td_.cloneNode(false);
-        $(td).attr('id', (col+"c"));
+        $(td).attr('id', (col));
         var span = _span_.cloneNode(false);
         $(span).text(board[row][col].val);
         if(board[row][col].revealed === true){$(span).addClass('revealed')}
@@ -64,20 +64,33 @@ var MineSweeper = (function() {
     $('#game-div').append(table);
   }
 
-  function init(){
-    game = new Board(5);
+  function setBoardForm(){
+    $('form').submit(function(e){
+      e.preventDefault();
+      var size = $('#size').val();
+      var difficulty = $('#difficulty').val();
+      createBoard(size, difficulty);
+      generateBoard();
+      userClick();
+    });
+  };
+
+  function createBoard(size, difficulty){
+    game = new Board(size, difficulty);
     board = game.board;
     game.seedBoard();
     game.calculateBoard();
+  };
+
+  function init(){
+    setBoardForm();
   }
 
   var
     board,
     game,
     publicApi = {
-      init: init,
-      generateBoard: generateBoard,
-      userClick: userClick
+      init: init
     }
   ;
 
@@ -86,6 +99,4 @@ var MineSweeper = (function() {
 
 $(document).ready(function(){
   MineSweeper.init();
-  MineSweeper.generateBoard();
-  MineSweeper.userClick();
 });
