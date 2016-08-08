@@ -1,4 +1,10 @@
+body {
+  text-align: center;
+}
+
 table {
+  max-width: 100%;
+  margin: 0 auto;
   border-spacing: 0px;
   text-align: center;
   font-size: 1em;
@@ -35,6 +41,22 @@ span {
   background: url('../images/bomb_img.jpg') no-repeat center center;
   background-size: cover;
   border: 4px solid red;
+}
+
+.explosion {
+  height: 100vh;
+  background: url('../images/explosion.gif') no-repeat center center;
+  background-size: cover;
+}
+
+.number {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  font-size: 8em;
+  margin-top: 0px;
+  font-weight: 600;
+  color: red;
 }
 
 #game-div {

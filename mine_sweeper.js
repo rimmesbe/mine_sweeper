@@ -2,7 +2,8 @@
 var _table_ = document.createElement('table'),
     _tr_ = document.createElement('tr'),
     _td_ = document.createElement('td'),
-    _span_ = document.createElement('span');
+    _span_ = document.createElement('span'),
+    _h1_ = document.createElement('h1');
 
 var MineSweeper = (function() {
 
@@ -30,7 +31,7 @@ var MineSweeper = (function() {
     game.isGameOver();
     if(game.gameOver===true){
       $('#game-div').unbind('mousedown');
-      game.getSpotValue(targetX,targetY)==="B" ? $('body').append('<h1>You blew up!</h1>') : $('body').append('<h1>You located all the bombs!</h1>');
+      game.getSpotValue(targetX,targetY)==="B" ? explosionTimer() : $('body').append('<h1>You located all the bombs!</h1>');
     };
   };
 
@@ -39,6 +40,45 @@ var MineSweeper = (function() {
     var targetX = parseInt($(target).parent().attr('id')); //row id
     var targetY = parseInt($(target).attr('id'));  //col id
     game.flagSpot(targetX, targetY);
+  };
+
+  function explosionTimer(){
+    var number = _h1_.cloneNode(false);
+    $(number).addClass('number');
+    $('body').append(number);
+
+    var counter = 3;
+    var timer = setInterval(function(){
+      $(number).text(counter.toString());
+      counter--;
+      checkInterval(counter);
+    }, 1000);
+    function checkInterval(count){
+      if(count<0){
+        clearInterval(timer);
+        $(number).hide();
+        $('body').empty();
+        $('body').addClass('explosion');
+      };
+    }
+
+    // for(var i = 3; i>=0; i--) {
+    //   setTimeout((function(x) {
+    //     return function() {
+    //         $(number).text(x.toString());
+    //     }
+    // })(i),1000+1000*i)};
+
+    // for(var i=3; i>=0; i--){
+    //   setTimeout(function(){
+    //     console.log("in setTimeout: "+i);
+    //     $(number).text(i.toString());
+    //   }, 1000);
+    // }
+    // setTimeout(function(){
+    //   $('body').empty();
+    //   $('body').addClass('explosion');
+    // }, 3000);
   };
 
   // generates DOM board, removes old board
