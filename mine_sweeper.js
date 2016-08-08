@@ -44,6 +44,7 @@ var MineSweeper = (function() {
 
   function explosionTimer(){
     var number = _h1_.cloneNode(false);
+    $('#game-div').css('opacity', .5);
     $(number).addClass('number');
     $('body').append(number);
 
@@ -59,26 +60,9 @@ var MineSweeper = (function() {
         $(number).hide();
         $('body').empty();
         $('body').addClass('explosion');
+        $('body').append("<a href='javascript:history.go(0)' class='retry'>play again?</a>")
       };
     }
-
-    // for(var i = 3; i>=0; i--) {
-    //   setTimeout((function(x) {
-    //     return function() {
-    //         $(number).text(x.toString());
-    //     }
-    // })(i),1000+1000*i)};
-
-    // for(var i=3; i>=0; i--){
-    //   setTimeout(function(){
-    //     console.log("in setTimeout: "+i);
-    //     $(number).text(i.toString());
-    //   }, 1000);
-    // }
-    // setTimeout(function(){
-    //   $('body').empty();
-    //   $('body').addClass('explosion');
-    // }, 3000);
   };
 
   // generates DOM board, removes old board
@@ -110,6 +94,7 @@ var MineSweeper = (function() {
   function setBoardForm(){
     $('form').submit(function(e){
       e.preventDefault();
+      $(this).hide();
       var size = $('#size').val();
       var difficulty = $('#difficulty').val();
       createBoard(size, difficulty);
