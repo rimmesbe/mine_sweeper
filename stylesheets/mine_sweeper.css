@@ -1,5 +1,6 @@
 body {
   text-align: center;
+  background: gray;
 }
 
 table {
@@ -8,6 +9,7 @@ table {
   border-spacing: 0px;
   text-align: center;
   font-size: 1em;
+  background-color: white;
 }
 
 td {
@@ -17,6 +19,14 @@ td {
   padding: 0px;
   margin: 0px;
   border-collapse: collapse;
+  border: 2px outset green;
+  background: black;
+}
+
+td:hover {
+  background: #2f352e;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
 }
 
 span {
@@ -37,16 +47,39 @@ span {
   background: red;
 }
 
+.flag:hover {
+  background: red;
+}
+
 .bomb {
   background: url('../images/bomb_img.jpg') no-repeat center center;
   background-size: cover;
-  border: 4px solid red;
+}
+
+.bomb:hover {
+  background: url('../images/bomb_img.jpg') no-repeat center center;
+  background-size: cover;
 }
 
 .explosion {
   height: 100vh;
   background: url('../images/explosion.gif') no-repeat center center;
   background-size: cover;
+}
+
+.winner {
+  height: 100vh;
+  background: url('../images/disarmed_bomb.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+.win-message {
+  max-width: 50%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  background-color: rgba(23, 3, 154, .9);
 }
 
 .number {
@@ -65,7 +98,7 @@ span {
     border-radius: 10px;
     position: fixed;
     left: 43%;
-    bottom: 0;
+    bottom: 50px;
     text-decoration: none;
     font-size: 2em;
     opacity: .5;
@@ -75,6 +108,11 @@ span {
   opacity: 1;
 }
 
-#game-div {
+.fade-out {
+  opacity: .5;
+  transition: opacity 3s;
+}
 
+#game-div {
+  margin-top: 10px;
 }

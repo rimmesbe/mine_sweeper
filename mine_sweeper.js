@@ -31,9 +31,17 @@ var MineSweeper = (function() {
     game.isGameOver();
     if(game.gameOver===true){
       $('#game-div').unbind('mousedown');
-      game.getSpotValue(targetX,targetY)==="B" ? explosionTimer() : $('body').append('<h1>You located all the bombs!</h1>');
+      game.getSpotValue(targetX,targetY)==="B" ? explosionTimer() : wonGame()
     };
   };
+
+  function wonGame() {
+    setTimeout(function(){
+      $('.menu').append('<h1 class="win-message">You disarmed all the bombs!</h1>')
+      $('body').addClass('winner');
+      $('body').append("<a href='javascript:history.go(0)' class='retry'>play again?</a>")
+    }, 1000)
+  }
 
   function rightClick(target) {
     $(target).toggleClass('flag');
@@ -44,7 +52,7 @@ var MineSweeper = (function() {
 
   function explosionTimer(){
     var number = _h1_.cloneNode(false);
-    $('#game-div').css('opacity', .5);
+    $('#game-div').addClass('fade-out');
     $(number).addClass('number');
     $('body').append(number);
 
