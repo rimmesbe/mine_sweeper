@@ -27,6 +27,7 @@ Board.prototype.calculateDifficulty = function(difficulty) {
 
 // generates board of custom size
 Board.prototype.createBoard = function(size) {
+  if(isNaN(size)){size=5;}
   var rows = [];
   for(var i=0; i<size; i++) {
     rows.push(new Array(size));
