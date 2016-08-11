@@ -71,6 +71,8 @@ span {
   height: 100vh;
   background: url('../images/disarmed_bomb.jpg') no-repeat center center;
   background-size: cover;
+  transition: background 5s;
+  transition-timing-function: ease-in;
 }
 
 .win-message {
