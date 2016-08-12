@@ -7,7 +7,7 @@ function Spot(val) {
 }
 
 function Board(size, difficulty) {
-  this.difficulty = this.calculateDifficulty(parseInt(difficulty));
+  this.difficulty = this.calculateDifficulty(difficulty);
   this.board = this.createBoard(parseInt(size));
   this.gameOver = false;
 }
@@ -22,8 +22,8 @@ Board.prototype.calculateDifficulty = function(difficulty) {
       return 3;
     default:
       return 6;
-  }
-}
+  };
+};
 
 // generates board of custom size
 Board.prototype.createBoard = function(size) {
@@ -39,7 +39,7 @@ Board.prototype.createBoard = function(size) {
 Board.prototype.seedBoard = function() {
   this.eachSpot(function(row,col){
     var random = Math.ceil(Math.random()*10);
-    (random % this.difficulty === 0) ? (this.board[row][col] = new Spot("B")) : (this.board[row][col] = new Spot(" "));
+    (random%this.difficulty===0) ? (this.board[row][col]=new Spot("B")) : (this.board[row][col]=new Spot(" "));
   }.bind(this));
 };
 
@@ -52,24 +52,23 @@ Board.prototype.calculateBoard = function() {
 
 // calculates/sets number of bombs around spot
 Board.prototype.calculateSpot = function(row, col) {
-  if(this.board[row][col].val !== "B") {
-    var bombCount = this.surroundingSpots(row, col, function(x,y,r,c){
-      if(this.board[r+x][c+y].val==="B") {return 1;}
+  if(this.getSpotValue(row,col) !== "B") {
+    var bombCount = this.surroundingSpots(row,col, function(x,y,r,c){
+      if(this.getSpotValue(r+x, c+y)==="B") {return 1;}
     }.bind(this));
-    this.board[row][col].val = bombCount;
+    this.setSpotValue(row,col, bombCount);
   };
 };
 
 // reveals spot, and recursively reveals adjacent spots if bomb count 0
 Board.prototype.updateSpot = function(row, col) {
   this.revealSpot(row, col);
-  if(this.board[row][col].val==='0') {
-    this.surroundingSpots(row, col, function(x,y,r,c){
-      var currentLocation = this.board[r+x][c+y];
-      if(currentLocation.val==='0' && currentLocation.revealed===false) {
+  if(this.getSpotValue(row,col)==='0') {
+    this.surroundingSpots(row,col, function(x,y,r,c){
+      if(this.getSpotValue(r+x,c+y)==='0' && this.board[r+x][c+y].revealed===false) {
         this.updateSpot((r+x),(c+y));
       }
-      if((!(x===0&&y==0))&&currentLocation.val!=='B'){currentLocation.revealed=true}
+      if((!(x===0&&y===0))&&this.getSpotValue(r+x,c+y)!=='B'){this.board[r+x][c+y].revealed=true}
     }.bind(this));
   };
 };
@@ -128,6 +127,10 @@ Board.prototype.revealSpot = function(row, col) {
 
 Board.prototype.getSpotValue = function(row, col){
   return this.board[row][col].val;
+}
+
+Board.prototype.setSpotValue = function(row, col, val){
+  this.board[row][col].val = val;
 }
 
 Board.prototype.displayBoard = function() {
