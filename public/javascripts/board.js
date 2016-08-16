@@ -10,7 +10,9 @@ function Board(size, difficulty) {
   this.difficulty = this.calculateDifficulty(difficulty);
   this.board = this.createBoard(parseInt(size));
   this.gameOver = false;
-}
+  this.revealedSpots = [];
+  this.bombCount = 0;
+};
 
 Board.prototype.calculateDifficulty = function(difficulty) {
   switch(difficulty) {
@@ -39,7 +41,12 @@ Board.prototype.createBoard = function(size) {
 Board.prototype.seedBoard = function() {
   this.eachSpot(function(row,col){
     var random = Math.ceil(Math.random()*10);
-    (random%this.difficulty===0) ? (this.board[row][col]=new Spot("B")) : (this.board[row][col]=new Spot(" "));
+    if(random%this.difficulty === 0){
+      this.board[row][col] = new Spot("B");
+      this.bombCount++;
+    }else{
+      this.board[row][col] = new Spot(" ");
+    };
   }.bind(this));
 };
 
@@ -62,6 +69,7 @@ Board.prototype.calculateSpot = function(row, col) {
 
 // reveals spot, and recursively reveals adjacent spots if bomb count 0
 Board.prototype.updateSpot = function(row, col) {
+  this.revealedSpots.push(this.getSpotValue(row,col));
   this.revealSpot(row, col);
   if(this.getSpotValue(row,col)==='0') {
     this.surroundingSpots(row,col, function(x,y,r,c){
@@ -80,11 +88,18 @@ Board.prototype.flagSpot = function(row, col) {
 
 // checks if game is over
 Board.prototype.isGameOver = function(){
-  // TODO: possible refactor here, cutting down to 1 loop
-  this.eachSpot(function(row, col){
-    if(this.board[row][col].val==='B' && this.board[row][col].revealed===true){this.gameOver=true;}
-  }.bind(this));
-  if(this.gameOver!==true){
+  var spotCount = this.board.length**2;
+  console.log(spotCount);
+  if(this.revealedSpots.includes("B")){
+    this.gameOver = true;
+    return this.gameOver;
+  }else if((this.revealedSpots.length + this.bombCount)!==spotCount){
+    this.gameOver = false;
+  }
+
+  if(this.gameOver===false){
+
+
     this.gameOver = true;
     this.eachSpot(function(row, col){
       if(this.board[row][col].val!=='B' && this.board[row][col].revealed===false){this.gameOver=false;}

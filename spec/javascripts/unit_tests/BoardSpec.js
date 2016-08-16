@@ -114,7 +114,7 @@ describe("Board", function() {
     });
 
     describe("#isGameOver", function(){
-      it("should no be true if none bomb spots still unrevealed", function(){
+      it("should not be true if no bomb spots still unrevealed", function(){
         expect(newBoard.isGameOver()).toEqual(false);
       });
 
