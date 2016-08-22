@@ -114,20 +114,18 @@ describe("Board", function() {
     });
 
     describe("#isGameOver", function(){
-      it("should not be true if no bomb spots still unrevealed", function(){
+      it("should not be true if non-bomb spots still unrevealed", function(){
         expect(newBoard.isGameOver()).toEqual(false);
       });
 
       it("should return board.gameOver true if bomb revealed", function(){
-        board[0][0].val = "B";
-        board[0][0].revealed = true;
+        newBoard.revealedSpots.push("B");
         expect(newBoard.isGameOver()).toEqual(true);
       });
 
       it("should return board.gameOver true if only bombs not revealed", function(){
-        board[0][0].val = "B";
         newBoard.eachSpot(function(row,col){
-          if(board[row][col].val!=="B"){board[row][col].revealed=true};
+          if(board[row][col].val!=="B"){newBoard.revealedSpots.push(newBoard.getSpotValue(row,col));}
         });
         expect(newBoard.isGameOver()).toEqual(true);
       });

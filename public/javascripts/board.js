@@ -76,7 +76,10 @@ Board.prototype.updateSpot = function(row, col) {
       if(this.getSpotValue(r+x,c+y)==='0' && this.board[r+x][c+y].revealed===false) {
         this.updateSpot((r+x),(c+y));
       }
-      if((!(x===0&&y===0))&&this.getSpotValue(r+x,c+y)!=='B'){this.board[r+x][c+y].revealed=true}
+      if((!(x===0&&y===0))&&this.getSpotValue(r+x,c+y)!=='B'&&this.board[r+x][c+y].revealed===false){
+        this.board[r+x][c+y].revealed = true;
+        this.revealedSpots.push(this.getSpotValue(r,c));
+      }
     }.bind(this));
   };
 };
@@ -89,21 +92,10 @@ Board.prototype.flagSpot = function(row, col) {
 // checks if game is over
 Board.prototype.isGameOver = function(){
   var spotCount = this.board.length**2;
-  console.log(spotCount);
   if(this.revealedSpots.includes("B")){
     this.gameOver = true;
-    return this.gameOver;
-  }else if((this.revealedSpots.length + this.bombCount)!==spotCount){
-    this.gameOver = false;
-  }
-
-  if(this.gameOver===false){
-
-
+  }else if((this.revealedSpots.length + this.bombCount)===spotCount){
     this.gameOver = true;
-    this.eachSpot(function(row, col){
-      if(this.board[row][col].val!=='B' && this.board[row][col].revealed===false){this.gameOver=false;}
-    }.bind(this));
   }
   return this.gameOver;
 };
