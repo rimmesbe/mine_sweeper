@@ -76,8 +76,10 @@ var MineSweeper = (function() {
 
   // generates DOM board, removes old board
   function generateBoard() {
-    $('.mineSweeper').remove();
+    $('.mineSweeper').remove(); // remove old board
+    var docfrag = document.createDocumentFragment();
     var table = _table_.cloneNode(false);
+    docfrag.appendChild(table);
     for(var row=0; row<board.length; row++) {
       var tr = _tr_.cloneNode(false);
       $(tr).attr('id', (row));
@@ -96,8 +98,8 @@ var MineSweeper = (function() {
       }
       $(table).append(tr);
     }
-    $('#game-div').append(table);
-  }
+    $('#game-div').append(docfrag);
+  };
 
   function setBoardForm(){
     $('form').submit(function(e){
