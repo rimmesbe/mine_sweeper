@@ -5,6 +5,8 @@ var _table_ = document.createElement('table'),
     _span_ = document.createElement('span'),
     _h1_ = document.createElement('h1');
 
+_table_.className = "mineSweeper";
+
 var MineSweeper = (function() {
 
   function userClick() {
@@ -28,20 +30,11 @@ var MineSweeper = (function() {
     var targetY = parseInt($(target).attr('id'));  //col id
     game.updateSpot(targetX, targetY);
     generateBoard();
-    game.isGameOver();
-    if(game.gameOver===true){
+    if(game.isGameOver()){
       $('#game-div').unbind('mousedown');
-      game.getSpotValue(targetX,targetY)==="B" ? explosionTimer() : wonGame()
+      game.getSpotValue(targetX,targetY)==="B" ? lostGame() : wonGame()
     };
   };
-
-  function wonGame() {
-    setTimeout(function(){
-      $('.menu').append('<h1 class="win-message">You disarmed all the bombs!</h1>')
-      $('body').addClass('winner');
-      $('body').append("<a href='javascript:history.go(0)' class='retry'>play again?</a>")
-    }, 1000)
-  }
 
   function rightClick(target) {
     $(target).toggleClass('flag');
@@ -50,22 +43,30 @@ var MineSweeper = (function() {
     game.flagSpot(targetX, targetY);
   };
 
-  function explosionTimer(){
-    var number = _h1_.cloneNode(false);
+  function wonGame() {
+    setTimeout(function(){
+      $('.menu').append('<h1 class="win-message">You disarmed all the mines!</h1>')
+      $('body').addClass('winner');
+      $('body').append("<a href='javascript:history.go(0)' class='retry'>play again?</a>")
+    }, 1000)
+  }
+
+  function lostGame(){
+    var countDown = _h1_.cloneNode(false);
     $('#game-div').addClass('fade-out');
-    $(number).addClass('number');
-    $('body').append(number);
+    $(countDown).addClass('counter');
+    $('body').append(countDown);
 
     var counter = 3;
     var timer = setInterval(function(){
-      $(number).text(counter.toString());
+      $(countDown).text(counter.toString());
       counter--;
       checkInterval(counter);
     }, 1000);
     function checkInterval(count){
       if(count<0){
         clearInterval(timer);
-        $(number).hide();
+        $(countDown).hide();
         $('body').empty();
         $('body').addClass('explosion');
         $('body').append("<a href='javascript:history.go(0)' class='retry'>play again?</a>")
@@ -75,8 +76,10 @@ var MineSweeper = (function() {
 
   // generates DOM board, removes old board
   function generateBoard() {
-    $('.mineSweeper').remove();
+    $('.mineSweeper').remove(); // remove old board
+    var docfrag = document.createDocumentFragment();
     var table = _table_.cloneNode(false);
+    docfrag.appendChild(table);
     for(var row=0; row<board.length; row++) {
       var tr = _tr_.cloneNode(false);
       $(tr).attr('id', (row));
@@ -94,10 +97,9 @@ var MineSweeper = (function() {
         $(tr).append(td);
       }
       $(table).append(tr);
-      $(table).addClass('mineSweeper');
     }
-    $('#game-div').append(table);
-  }
+    $('#game-div').append(docfrag);
+  };
 
   function setBoardForm(){
     $('form').submit(function(e){
