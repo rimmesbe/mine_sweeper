@@ -12,7 +12,7 @@ describe("Board", function() {
   });
 
   it("should default to easy difficulty", function() {
-    expect(newBoard.difficulty).toEqual(6);
+    expect(newBoard.difficulty).toEqual(10);
   });
 
   it("should default to board size 5", function() {
@@ -36,17 +36,17 @@ describe("Board", function() {
   describe("#calculateDifficulty", function() {
     it("should be able to set difficulty to easy", function() {
       newBoard.difficulty = newBoard.calculateDifficulty('easy');
-      expect(newBoard.difficulty).toEqual(6);
+      expect(newBoard.difficulty).toEqual(10);
     });
 
     it("should be able to set difficulty to medium", function() {
       newBoard.difficulty = newBoard.calculateDifficulty('medium');
-      expect(newBoard.difficulty).toEqual(4);
+      expect(newBoard.difficulty).toEqual(7);
     });
 
     it("should be able to set difficulty to hard", function() {
       newBoard.difficulty = newBoard.calculateDifficulty('hard');
-      expect(newBoard.difficulty).toEqual(3);
+      expect(newBoard.difficulty).toEqual(5);
     });
   });
 
@@ -114,20 +114,18 @@ describe("Board", function() {
     });
 
     describe("#isGameOver", function(){
-      it("should no be true if none bomb spots still unrevealed", function(){
+      it("should not be true if non-bomb spots still unrevealed", function(){
         expect(newBoard.isGameOver()).toEqual(false);
       });
 
       it("should return board.gameOver true if bomb revealed", function(){
-        board[0][0].val = "B";
-        board[0][0].revealed = true;
+        newBoard.revealedSpots.push("B");
         expect(newBoard.isGameOver()).toEqual(true);
       });
 
       it("should return board.gameOver true if only bombs not revealed", function(){
-        board[0][0].val = "B";
         newBoard.eachSpot(function(row,col){
-          if(board[row][col].val!=="B"){board[row][col].revealed=true};
+          if(board[row][col].val!=="B"){newBoard.revealedSpots.push(newBoard.getSpotValue(row,col));}
         });
         expect(newBoard.isGameOver()).toEqual(true);
       });

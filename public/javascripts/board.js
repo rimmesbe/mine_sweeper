@@ -10,18 +10,20 @@ function Board(size, difficulty) {
   this.difficulty = this.calculateDifficulty(difficulty);
   this.board = this.createBoard(parseInt(size));
   this.gameOver = false;
-}
+  this.revealedSpots = [];
+  this.bombCount = 0;
+};
 
 Board.prototype.calculateDifficulty = function(difficulty) {
   switch(difficulty) {
     case 'easy':
-      return 6;
+      return 10;
     case 'medium':
-      return 4;
+      return 7;
     case 'hard':
-      return 3;
+      return 5;
     default:
-      return 6;
+      return 10;
   };
 };
 
@@ -38,8 +40,13 @@ Board.prototype.createBoard = function(size) {
 // seeds board with random bomb placement
 Board.prototype.seedBoard = function() {
   this.eachSpot(function(row,col){
-    var random = Math.ceil(Math.random()*10);
-    (random%this.difficulty===0) ? (this.board[row][col]=new Spot("B")) : (this.board[row][col]=new Spot(" "));
+    var random = Math.ceil(Math.random()*100);
+    if(random%this.difficulty === 0){
+      this.board[row][col] = new Spot("B");
+      this.bombCount++;
+    }else{
+      this.board[row][col] = new Spot(" ");
+    };
   }.bind(this));
 };
 
@@ -62,33 +69,33 @@ Board.prototype.calculateSpot = function(row, col) {
 
 // reveals spot, and recursively reveals adjacent spots if bomb count 0
 Board.prototype.updateSpot = function(row, col) {
+  this.revealedSpots.push(this.getSpotValue(row,col));
   this.revealSpot(row, col);
   if(this.getSpotValue(row,col)==='0') {
     this.surroundingSpots(row,col, function(x,y,r,c){
-      if(this.getSpotValue(r+x,c+y)==='0' && this.board[r+x][c+y].revealed===false) {
+      if(this.getSpotValue(r+x,c+y)==='0' && this.getSpot(r+x,c+y).revealed===false) {
         this.updateSpot((r+x),(c+y));
       }
-      if((!(x===0&&y===0))&&this.getSpotValue(r+x,c+y)!=='B'){this.board[r+x][c+y].revealed=true}
+      if((!(x===0&&y===0))&&this.getSpotValue(r+x,c+y)!=='B'&&this.getSpot(r+x,c+y).revealed===false){
+        this.getSpot(r+x,c+y).revealed = true;
+        this.revealedSpots.push(this.getSpotValue(r,c));
+      }
     }.bind(this));
   };
 };
 
 // toggles flagged status of spot
 Board.prototype.flagSpot = function(row, col) {
-  this.board[row][col].flagged===true ? this.board[row][col].flagged=false : this.board[row][col].flagged=true
+  this.getSpot(row,col).flagged===true ? this.getSpot(row,col).flagged=false : this.getSpot(row,col).flagged=true
 }
 
 // checks if game is over
 Board.prototype.isGameOver = function(){
-  // TODO: possible refactor here, cutting down to 1 loop
-  this.eachSpot(function(row, col){
-    if(this.board[row][col].val==='B' && this.board[row][col].revealed===true){this.gameOver=true;}
-  }.bind(this));
-  if(this.gameOver!==true){
+  var spotCount = this.board.length**2;
+  if(this.revealedSpots.includes("B")){
     this.gameOver = true;
-    this.eachSpot(function(row, col){
-      if(this.board[row][col].val!=='B' && this.board[row][col].revealed===false){this.gameOver=false;}
-    }.bind(this));
+  }else if((this.revealedSpots.length + this.bombCount)===spotCount){
+    this.gameOver = true;
   }
   return this.gameOver;
 };
@@ -104,8 +111,8 @@ Board.prototype.surroundingSpots = function(row, col, func){
 
   for(var x = startX; x < endX; x++) {
     for(var y = startY; y < endY; y++) {
-      var temp = func(x, y, row, col);
-      if(!(isNaN(temp))){val = val + temp;}
+      var temp = func(x, y, row, col); // holds return value of passed function
+      if(!(isNaN(temp))){val = val + temp;} // if temp is a number add it to val
     }
   }
   return val.toString();
@@ -118,19 +125,22 @@ Board.prototype.eachSpot = function(func){
       func(i,j);
     }
   }
-}
+};
 
-// sets a spot to status revealed
+Board.prototype.getSpot = function(row, col) {
+  return this.board[row][col];
+};
+
 Board.prototype.revealSpot = function(row, col) {
-  this.board[row][col].revealed = true;
+  this.getSpot(row,col).revealed = true;
 };
 
 Board.prototype.getSpotValue = function(row, col){
-  return this.board[row][col].val;
+  return this.getSpot(row,col).val;
 }
 
 Board.prototype.setSpotValue = function(row, col, val){
-  this.board[row][col].val = val;
+  this.getSpot(row,col).val = val;
 }
 
 Board.prototype.displayBoard = function() {
