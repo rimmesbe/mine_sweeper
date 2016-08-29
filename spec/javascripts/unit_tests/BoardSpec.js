@@ -12,7 +12,7 @@ describe("Board", function() {
   });
 
   it("should default to easy difficulty", function() {
-    expect(newBoard.difficulty).toEqual(6);
+    expect(newBoard.difficulty).toEqual(10);
   });
 
   it("should default to board size 5", function() {
@@ -36,17 +36,17 @@ describe("Board", function() {
   describe("#calculateDifficulty", function() {
     it("should be able to set difficulty to easy", function() {
       newBoard.difficulty = newBoard.calculateDifficulty('easy');
-      expect(newBoard.difficulty).toEqual(6);
+      expect(newBoard.difficulty).toEqual(10);
     });
 
     it("should be able to set difficulty to medium", function() {
       newBoard.difficulty = newBoard.calculateDifficulty('medium');
-      expect(newBoard.difficulty).toEqual(4);
+      expect(newBoard.difficulty).toEqual(7);
     });
 
     it("should be able to set difficulty to hard", function() {
       newBoard.difficulty = newBoard.calculateDifficulty('hard');
-      expect(newBoard.difficulty).toEqual(3);
+      expect(newBoard.difficulty).toEqual(5);
     });
   });
 

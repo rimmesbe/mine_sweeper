@@ -17,13 +17,13 @@ function Board(size, difficulty) {
 Board.prototype.calculateDifficulty = function(difficulty) {
   switch(difficulty) {
     case 'easy':
-      return 6;
+      return 10;
     case 'medium':
-      return 4;
+      return 7;
     case 'hard':
-      return 3;
+      return 5;
     default:
-      return 6;
+      return 10;
   };
 };
 
@@ -40,7 +40,7 @@ Board.prototype.createBoard = function(size) {
 // seeds board with random bomb placement
 Board.prototype.seedBoard = function() {
   this.eachSpot(function(row,col){
-    var random = Math.ceil(Math.random()*10);
+    var random = Math.ceil(Math.random()*100);
     if(random%this.difficulty === 0){
       this.board[row][col] = new Spot("B");
       this.bombCount++;
