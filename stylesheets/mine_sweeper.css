@@ -84,7 +84,7 @@ span {
   background-color: rgba(23, 3, 154, .9);
 }
 
-.number {
+.counter {
   position: fixed;
   top: 40%;
   left: 45%;

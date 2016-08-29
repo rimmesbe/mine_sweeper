@@ -76,7 +76,7 @@ Board.prototype.updateSpot = function(row, col) {
       if(this.getSpotValue(r+x,c+y)==='0' && this.getSpot(r+x,c+y).revealed===false) {
         this.updateSpot((r+x),(c+y));
       }
-      if((!(x===0&&y===0))&&this.getSpotValue(r+x,c+y)!=='B'&&this.getSpot(r+x,c+y).revealed===false){
+      if((!(x===0&&y===0))&&this.getSpotValue(r+x,c+y)!=='B'&&this.getSpot(r+x,c+y).revealed===false&&this.getSpot(r+x,c+y).flagged===false){
         this.getSpot(r+x,c+y).revealed = true;
         this.revealedSpots.push(this.getSpotValue(r,c));
       }
