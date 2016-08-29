@@ -111,7 +111,7 @@ Board.prototype.surroundingSpots = function(row, col, func){
 
   for(var x = startX; x < endX; x++) {
     for(var y = startY; y < endY; y++) {
-      var temp = func(x, y, row, col); // holds return value of passes function
+      var temp = func(x, y, row, col); // holds return value of passed function
       if(!(isNaN(temp))){val = val + temp;} // if temp is a number add it to val
     }
   }
